@@ -267,17 +267,82 @@ var palindrome = function(string) { // Completed
 // modulo(5,2) // 1
 // modulo(17,5) // 2
 // modulo(22,6) // 4
+
+// Completed
 var modulo = function(x, y) {
+  if (y === 0) {
+    return NaN;
+  }
+
+  if (x < 0) {
+    return -modulo(-x,  y);
+  }
+
+  if (y < 0) {
+    return  modulo( x, -y);
+  }
+
+  if (x < y) {
+    return  x;
+  }
+
+  return modulo(x - y, y);
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
+// PESEUDOCODE -----
+// if y equals 0
+  // return 0
+
+// if equals 1
+  // return x
+// else if x is less than 0
+  // return the recursive function negative with x negative
+// else if y is less than 0
+  // return the recursive function negative with y negative
+// else
+  // add the recursive function with y minus 1 to x
+
+// return x
+// Completed ---
 var multiply = function(x, y) {
+  if (y === 0) {
+    return 0;
+  }
+
+  if (y === 1) {
+    return x;
+  } else if (x < 0) {
+    return -multiply(-x, y);
+  } else if (y < 0) {
+    return -multiply(x, -y);
+  } else {
+    x += multiply(x, y - 1);
+  }
+  return x;
 };
 
 // 13. Write a function that divides two numbers without using the / operator or
 // Math methods to arrive at an approximate quotient (ignore decimal endings).
+// Completed
 var divide = function(x, y) {
+  if (y === 0) {
+    return NaN;
+  }
+  var count = 0;
+  count++;
+
+  if (x < 0) {
+    return -divide(-x, y);
+  } else if (y < 0) {
+    return -divide(x, -y);
+  } else if (x < y) {
+    return 0;
+  } else {
+    count += divide(x - y, y);
+  }
+  return count;
 };
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers. The GCD of two
@@ -285,29 +350,121 @@ var divide = function(x, y) {
 // gcd(4,36); // 4
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
-var gcd = function(x, y) {
+var gcd = function(x, y) { // Completed
+  // if x or y are negative
+  if (x < 0 || y < 0) {
+    // return null
+    return null;
+  }
+  // BASE CASE ---
+  // if x is greater than or equal to y
+  if (!y) { // else if x and y is modulo 0
+    // return x
+    return x;
+  } else { // else
+    // RECURSIVE CASE ---
+    // assign x to recursion with x + 1 as input
+    // console.log("---")
+    x = gcd(y, x % y);
+  }
+
+  // return x
+  return x;
 };
 
 // 15. Write a function that compares each character of two strings and returns true if
 // both are identical.
 // compareStr('house', 'houses') // false
 // compareStr('tomato', 'tomato') // true
-var compareStr = function(str1, str2) {
+var compareStr = function(str1, str2) { // Completed
+  // declare index set to 0
+  var index = 0;
+
+  // BASE CASE ---
+  // if a character does not match from the string
+  if (str1[index] !== str2[index]) {
+    // return false
+    return false;
+  } else if (str1[index] === undefined && str2[index] === undefined) {
+  // else if both strings are undefined
+    // return true
+    return true;
+  } else { // otherwise
+  // RECURSIVE CASE ---
+    // return recursion with input of both strings being sliced each time
+    // starting from index 1
+    return compareStr(str1.slice(1), str2.slice(1));
+  }
 };
 
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
-var createArray = function(str) {
+var createArray = function(str) { // Completed
+  // declare empty array and variable set to 0
+  var result = [];
+  var index = 0;
+
+  // BASE CASE ---
+  // if str index is undefined
+  if (str[index] === undefined) {
+    // return result array
+    return result;
+  } else { // otherwise
+    // RECURSIVE CASE ---
+    // push value into array
+    result.push(str[index]);
+    // recursive function with sliced string input from index 1
+    result = result.concat(createArray(str.slice(1)));
+  }
+  // return array
+  return result;
 };
 
 // 17. Reverse the order of an array
-var reverseArr = function(array) {
+var reverseArr = function(array) { // Completed
+  // declare empty array and index set to last value in array
+  var result = [];
+  var index = array.length - 1;
+
+  // BASE CASE ---
+  // if array is empty
+  if (array.length === 0) {
+    // return empty array
+    return result;
+  } else { // otherwise
+    // RECURSIVE CASE ---
+    // push value into empty array
+    result.push(array[index]);
+    // pop off value in array
+    array.pop();
+    // use recursion
+    result = result.concat(reverseArr(array));
+  }
+  // return result array
+  return result;
 };
 
 // 18. Create a new array with a given value and length.
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
-var buildList = function(value, length) {
+var buildList = function(value, length) { // Completed
+  // declare result array
+  var result = [];
+
+  // BASE CASE ---
+  // if length equals 0
+  if (length === 0) {
+    // return result array
+    return result;
+  } else { // otherwise
+    // RECURSIVE CASE ---
+    // push value into result
+    result.push(value);
+    // concat recursion function with input length minus 1 in result array
+    result = result.concat(buildList(value, length - 1));
+  }
+  // return result
+  return result;
 };
 
 // 19. Implement FizzBuzz. Given integer n, return an array of the string representations of 1 to n.
@@ -315,25 +472,111 @@ var buildList = function(value, length) {
 // For multiples of five, output 'Buzz' instead of the number.
 // For numbers which are multiples of both three and five, output “FizzBuzz” instead of the number.
 // fizzBuzz(5) // ['1','2','Fizz','4','Buzz']
-var fizzBuzz = function(n) {
+var fizzBuzz = function(n) { // Completed
+  // declare result array empty
+  var result = [];
+
+  // BASE CASE ---
+  // if n equals 0
+  if (n === 0) {
+    // return result
+    return result;
+  } else if (n % 3 === 0 && n % 5 === 0) { // otherwise if n is modulo of 3 AND of 5
+    // push 'FizzBuzz' into result
+    result.push('FizzBuzz');
+  } else if (n % 3 === 0) { // otherwise if n is modulo to 3 only
+    // push 'Fizz' into result
+    result.push('Fizz');
+  } else if (n % 5 === 0) { // otherwise if n is modulo to 5 only
+    // push 'Buzz' into result
+    result.push('Buzz');
+  } else { // otherwise
+    // push n into result array
+    result.push('' + n + '');
+  }
+
+  // RECURSIVE CASE ---
+  // result equals result concat with recursive function
+  // n - 1 as input and in reverse
+  result = result.concat(fizzBuzz(n - 1).reverse());
+
+  // return result array in reverse
+  return result.reverse();
 };
 
 // 20. Count the occurrence of a value in a list.
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
-var countOccurrence = function(array, value) {
+var countOccurrence = function(array, value) { // Completed
+  // declare result variable set to 0
+  var result = 0;
+
+  // BASE CASE ---
+  // if array at index 0 is undefined
+  if (array.length === 0) {
+    // return result
+    return result;
+  } else if (array[0] === value) { // else if array at index 0 is value
+    // increment result
+    result++;
+  }
+  // RECURSIVE CASE ---
+  // shift array (removes first value of array)
+  array.shift();
+  // result equals plus the recursive function
+  result += countOccurrence(array, value);
+  // return result
+  return result;
 };
 
 // 21. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
-var rMap = function(array, callback) {
+var rMap = function(array, callback) { // Completed
+  // delcare result array empty
+  var result = [];
+
+  // BASE CASE ---
+  // if the type of array is a number
+  if (typeof (array) === 'number') {
+    // push the value into result with the callback function
+    result.push(callback(array));
+    // return result array
+    return result;
+  }
+
+  // RECURSIVE CASE ---
+  // iterate through array using forEach
+  array.forEach(function(currentValue) {
+    // result equals result concat with recursive function
+    result = result.concat(rMap(currentValue, callback));
+  })
+  // return result array
+  return result;
 };
 
 // 22. Write a function that counts the number of times a key occurs in an object.
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
-var countKeysInObj = function(obj, key) {
+var countKeysInObj = function(obj, key) { // Completed
+  // declare result variable set to 0
+  var result = 0;
+
+  // iterate through object
+  for (var keyObj in obj) {
+    // BASE CASE ---
+    // if key equals key
+    if (keyObj === key) {
+      // increment result
+      result++;
+    } else if (typeof(obj[keyObj]) === 'object') { // else if value is an object
+    // RECURSIVE CASE ---
+      // result plus recursive function with value as obj input
+      result += countKeysInObj(obj[keyObj], key);
+    }
+  }
+  // return result variable
+  return result;
 };
 
 // 23. Write a function that counts the number of times a value occurs in an object.
